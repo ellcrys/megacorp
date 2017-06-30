@@ -12,6 +12,10 @@ This contract provides the following functions:
 
 - **get-account**: Retrieve information about a MegaCorp account.
 
+- **get-all-accounts**: Retrieves all MegaCorp accounts
+
+- **get-all-employees**: Retrieves all MegaCorp employees
+
 - **get-total-supply**: Retrieve the current total of un-issued MegaCoins.
 
 

@@ -1,0 +1,35 @@
+.nav {
+    overflow: auto;
+    
+    .logo {
+        overflow: auto;
+        margin-top: 10px;
+    }
+}
+
+.overview {
+    margin-top: 40px;
+    
+    .subtitle {
+        color: $grey;
+    }
+}
+
+.content {
+    padding: 20px;
+}
+
+.create-account {
+    width: 500px;
+    min-height: 300px;
+    border: 1px solid $grey-light;
+    border-radius: 10px;
+    margin: auto;
+    margin-top: 50px;
+    
+    .heading {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid $grey-light;
+    }
+}

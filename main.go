@@ -2,12 +2,9 @@ package main
 
 import (
 	"fmt"
-
-	"strings"
-
-	"time"
-
 	"strconv"
+	"strings"
+	"time"
 
 	. "github.com/ellcrys/cocoon/core/stub"
 	"github.com/ellcrys/util"
@@ -27,8 +24,10 @@ func ToJSON(obj interface{}) (bs []byte) {
 
 // Account defines a structure for representing an account
 type Account struct {
-	ID      string
-	Balance float64
+	ID        string
+	Balance   float64
+	FirstName string
+	LastName  string
 }
 
 // Employee represents a MegaCorp employee
@@ -50,7 +49,7 @@ func (m *MegaCorp) OnInit() error {
 
 	// Initialize fields
 	m.maxEmployee = 100
-	m.salaryPayDay = 30
+	m.salaryPayDay = 29
 	m.positionSalary = map[string]float64{
 		"ceo":          200000.00,
 		"coo":          170000.00,
@@ -84,7 +83,12 @@ func (m *MegaCorp) OnInvoke(md Metadata, function string, params []string) ([]by
 
 	// create-account function creates a new account
 	case "create-account":
-		newAcct, err := m.createAccount()
+
+		if len(params) < 2 {
+			return nil, fmt.Errorf("first name and last name are required")
+		}
+
+		newAcct, err := m.createAccount(params[0], params[1])
 		if err != nil {
 			return nil, fmt.Errorf("failed to create account")
 		}
@@ -102,6 +106,11 @@ func (m *MegaCorp) OnInvoke(md Metadata, function string, params []string) ([]by
 		}
 		return ToJSON(newEmp), nil
 
+	// get-all-employees fetches all employees
+	case "get-all-employees":
+		return ToJSON(m.getAllEmployees()), nil
+
+	// get-account fetches an account
 	case "get-account":
 		if len(params) < 1 {
 			return nil, fmt.Errorf("account is required")
@@ -112,11 +121,16 @@ func (m *MegaCorp) OnInvoke(md Metadata, function string, params []string) ([]by
 		}
 		return ToJSON(acct), nil
 
+	case "get-all-accounts":
+		return ToJSON(m.getAllAccounts()), nil
+
+	// get-total-supply fetches the total supply of megacoin
 	case "get-total-supply":
 		return []byte(m.getRemainingCoinSupply()), nil
-	}
 
-	return nil, nil
+	default:
+		return nil, fmt.Errorf("unsupported function")
+	}
 }
 
 // OnStop is called when the contract is stopped.
@@ -126,8 +140,8 @@ func (m *MegaCorp) OnStop() {
 }
 
 // createAccount creates a new account
-func (m *MegaCorp) createAccount() (acct *Account, err error) {
-	acct = &Account{ID: util.UUID4()}
+func (m *MegaCorp) createAccount(firstName, lastName string) (acct *Account, err error) {
+	acct = &Account{ID: util.UUID4(), FirstName: firstName, LastName: lastName}
 	_, err = Me.Put(Ledger, fmt.Sprintf("account.%s", acct.ID), ToJSON(acct))
 	return
 }
@@ -165,6 +179,28 @@ func (m *MegaCorp) createEmployee(accountID, position string) (emp *Employee, er
 func (m *MegaCorp) getAccount(id string) (acct *Account, err error) {
 	tx, err := Me.Get(Ledger, fmt.Sprintf("account.%s", id))
 	util.FromJSON([]byte(tx.Value), &acct)
+	return
+}
+
+// getAllAccounts fetches all accounts
+func (m *MegaCorp) getAllAccounts() (accts []*Account) {
+	rg := Me.NewRangeGetter(Ledger, "account", "", false)
+	for rg.HasNext() {
+		var act Account
+		util.FromJSON([]byte(rg.Next().Value), &act)
+		accts = append(accts, &act)
+	}
+	return
+}
+
+// getAllEmployees fetches all employees
+func (m *MegaCorp) getAllEmployees() (emps []*Employee) {
+	rg := Me.NewRangeGetter(Ledger, "employee", "", false)
+	for rg.HasNext() {
+		var emp Employee
+		util.FromJSON([]byte(rg.Next().Value), &emp)
+		emps = append(emps, &emp)
+	}
 	return
 }
 
