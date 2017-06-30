@@ -1,0 +1,28 @@
+syntax = "proto3";
+package proto_runtime;
+
+service Stub {
+    rpc HealthCheck(Ok) returns (Ok);
+    rpc Invoke(InvokeParam) returns (InvokeResponse);
+    rpc Stop(Void) returns (Void);
+}
+
+message Void {
+}
+
+message Ok {
+    int32 status = 1;
+}
+
+message InvokeParam {
+    string ID = 1;
+    string function = 2;
+    repeated string params = 3;
+    map<string,string> header = 4;
+}
+
+message InvokeResponse {
+    string ID = 1; 
+    int32 status = 2;
+    bytes body = 3;
+}

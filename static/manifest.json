@@ -1,0 +1,10 @@
+{
+    "name": "MegaCorp",
+    "description": "A simple contract for managing MegaCorp employees",
+    "functions": [
+        { "title": "Create Account", "name": "create-account" },
+        { "title": "Create Employee", "name": "create-employee" },
+        { "title": "Get Account", "name": "get-account" },
+        { "title": "Get MegaCoin Supply", "name": "get-total-supply" }
+    ]
+}
