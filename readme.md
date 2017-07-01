@@ -18,6 +18,8 @@ This contract provides the following functions:
 
 - **get-total-supply**: Retrieve the current total of un-issued MegaCoins.
 
+- **pay-salaries**: Force salary payment at any time.
+
 
 **NOTE:**
 
