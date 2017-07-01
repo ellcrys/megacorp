@@ -53,7 +53,7 @@ class CreateAccount extends Base {
             return <option key={p} value={p}>{p}</option>
         })
         
-        return <div className="create-account">
+        return <div className="mid-panel">
             <div className="heading">
                 CREATE MEGACORP EMPLOYEE
             </div>

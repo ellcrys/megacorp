@@ -45,7 +45,7 @@ class CreateAccount extends Base {
         if (this.state.accountCreated) {
             notification = <div className="notification is-success">Account Created!</div>
         }
-        return <div className="create-account">
+        return <div className="mid-panel">
             <div className="heading">
                 CREATE MEGACORP ACCOUNT
             </div>

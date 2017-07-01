@@ -14,7 +14,7 @@ import (
 const TotalMegaCoin = "250000000"
 
 // Ledger is the name of the dedicated ledger for this contract
-const Ledger = "megaledger2"
+const Ledger = "megaledger5"
 
 // ToJSON returns JSON encoded representation of an object
 func ToJSON(obj interface{}) (bs []byte) {
@@ -128,6 +128,11 @@ func (m *MegaCorp) OnInvoke(md Metadata, function string, params []string) ([]by
 	case "get-total-supply":
 		return []byte(m.getRemainingCoinSupply()), nil
 
+	// pay-salaries initiates salary payment. This also called by cron()
+	case "pay-salaries":
+		m.paySalaries()
+		return []byte("done"), nil
+
 	default:
 		return nil, fmt.Errorf("unsupported function")
 	}
@@ -178,6 +183,12 @@ func (m *MegaCorp) createEmployee(accountID, position string) (emp *Employee, er
 // getAccount gets an account
 func (m *MegaCorp) getAccount(id string) (acct *Account, err error) {
 	tx, err := Me.Get(Ledger, fmt.Sprintf("account.%s", id))
+	if err != nil {
+		if strings.Contains(err.Error(), "transaction not found") {
+			err = fmt.Errorf("account not found")
+		}
+		return
+	}
 	util.FromJSON([]byte(tx.Value), &acct)
 	return
 }
@@ -187,7 +198,8 @@ func (m *MegaCorp) getAllAccounts() (accts []*Account) {
 	rg := Me.NewRangeGetter(Ledger, "account", "", false)
 	for rg.HasNext() {
 		var act Account
-		util.FromJSON([]byte(rg.Next().Value), &act)
+		tx := rg.Next()
+		util.FromJSON([]byte(tx.Value), &act)
 		accts = append(accts, &act)
 	}
 	return
@@ -216,42 +228,60 @@ func (m *MegaCorp) getRemainingCoinSupply() string {
 	return tx.Value
 }
 
+// getTotalMegaCoinSupply gets the total megacoin supply
+func (m *MegaCorp) getTotalMegaCoinSupply() (curTotalSupply float64, err error) {
+	tx, err := Me.Get(Ledger, "total_megacoin")
+	curTotalSupply, _ = strconv.ParseFloat(tx.Value, 64)
+	return
+}
+
 // deductTotalMegaCoinSupply deducts from the total megacoin supply
 func (m *MegaCorp) deductTotalMegaCoinSupply(amt float64) (err error) {
-	tx, err := Me.Get(Ledger, "total_megacoin")
-	curTotalSupply, _ := strconv.ParseFloat(tx.Value, 64)
+	curTotalSupply, err := m.getTotalMegaCoinSupply()
+	if err != nil {
+		return
+	}
 	newTotalSupply := curTotalSupply - amt
 	newTotalSupplyBytes := []byte(strconv.FormatFloat(newTotalSupply, 'f', -1, 64))
 	_, err = Me.Put(Ledger, "total_megacoin", newTotalSupplyBytes)
 	return
 }
 
+func (m *MegaCorp) paySalaries() {
+	// get all the employees
+	rg := Me.NewRangeGetter(Ledger, "employee", "", false)
+	for rg.HasNext() {
+		var emp Employee
+		util.FromJSON([]byte(rg.Next().Value), &emp)
+
+		// get account
+		acct, _ := m.getAccount(emp.AccountID)
+		amountToPay := m.positionSalary[emp.Position]
+
+		// get current total supply of megacoins
+		megacoinTotalSupply, _ := m.getTotalMegaCoinSupply()
+
+		// ensure there is enough megacoin to pay
+		if amountToPay > megacoinTotalSupply {
+			return
+		}
+
+		// reduce total mega coin
+		m.deductTotalMegaCoinSupply(amountToPay)
+
+		// save changes by overriding previous account
+		acct.Balance += amountToPay
+		m.saveAccount(acct)
+	}
+}
+
 // cron runs background tasks such as paying salaries when due
 func (m *MegaCorp) cron() {
 	t := time.NewTicker(60 * time.Second)
 	for _ = range t.C {
-
 		fmt.Println("pay salary")
-
 		if time.Now().Day() == m.salaryPayDay {
-
-			// get all the employees
-			rg := Me.NewRangeGetter(Ledger, "employee", "", false)
-			for rg.HasNext() {
-				var emp Employee
-				util.FromJSON([]byte(rg.Next().Value), &emp)
-
-				// get account
-				acct, _ := m.getAccount(emp.AccountID)
-				amountToPay := m.positionSalary[emp.Position]
-				acct.Balance += amountToPay
-
-				// reduce total mega coin
-				m.deductTotalMegaCoinSupply(amountToPay)
-
-				// save changes by overriding previous account
-				m.saveAccount(acct)
-			}
+			m.paySalaries()
 		}
 	}
 }

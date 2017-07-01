@@ -15,11 +15,8 @@
     }
 }
 
-.content {
-    padding: 20px;
-}
 
-.create-account {
+.mid-panel {
     width: 500px;
     min-height: 300px;
     border: 1px solid $grey-light;
@@ -31,5 +28,19 @@
         padding: 10px;
         text-align: center;
         border-bottom: 1px solid $grey-light;
+    }
+    
+    .content {
+        padding: 20px;
+    }
+    
+    .amount {
+        margin-top: 50px;
+    }
+    
+    .pay-salary-btn{
+        width: 120px;
+        margin: auto;
+        margin-top: 30px;
     }
 }

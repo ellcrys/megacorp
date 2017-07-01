@@ -4313,17 +4313,22 @@ label.panel-block {
   .overview .subtitle {
     color: #7a7a7a; }
 
-.content {
-  padding: 20px; }
-
-.create-account {
+.mid-panel {
   width: 500px;
   min-height: 300px;
   border: 1px solid #b5b5b5;
   border-radius: 10px;
   margin: auto;
   margin-top: 50px; }
-  .create-account .heading {
+  .mid-panel .heading {
     padding: 10px;
     text-align: center;
     border-bottom: 1px solid #b5b5b5; }
+  .mid-panel .content {
+    padding: 20px; }
+  .mid-panel .amount {
+    margin-top: 50px; }
+  .mid-panel .pay-salary-btn {
+    width: 120px;
+    margin: auto;
+    margin-top: 30px; }

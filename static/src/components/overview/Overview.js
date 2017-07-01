@@ -46,7 +46,7 @@ class Overview extends Base {
     
     getAllAccounts() {
         this.invoke(uuid4(), "get-all-accounts", []).then((data) => {
-            this.setState({ accounts: JSON.parse(base64.decode(data.body)) })
+            this.setState({ accounts: JSON.parse(base64.decode(data.body)) || [] })
         }).catch((e: InvokeError) => {
             alert("failed to create account: " + e.body.msg)
         })
@@ -54,7 +54,7 @@ class Overview extends Base {
     
     getAllEmployees() {
         this.invoke(uuid4(), "get-all-employees", []).then((data) => {
-            this.setState({ employees: JSON.parse(base64.decode(data.body)) })
+            this.setState({ employees: JSON.parse(base64.decode(data.body)) || [] })
         }).catch((e: InvokeError) => {
             alert("failed to create account: " + e.body.msg)
         })
@@ -70,10 +70,8 @@ class Overview extends Base {
                 </figure>
                 <div className="media-content">
                     <div className="content">
-                    <p>
-                        <strong>{account.FirstName} {account.LastName}</strong> <small>{account.ID}</small>
-                    </p>
-                    <p>Account Balance: {account.Balance}</p>
+                    <div><strong>{account.FirstName} {account.LastName}</strong> <small>{account.ID}</small></div>
+                    <p><b>Balance:</b> {account.Balance}</p>
                     </div>
                 </div>
             </article>
@@ -101,12 +99,12 @@ class Overview extends Base {
     
     render() {
         
-        let createAcctBtn = <a className="button is-primary">Create</a>
+        let createAcctBtn = <a href="create-account" className="button is-primary">Create</a>
         if (this.state.accounts.length > 0) {
             createAcctBtn = null
         }
         
-        let createEmpBtn = <a className="button is-primary">Create</a>
+        let createEmpBtn = <a href="create-employee" className="button is-primary">Create</a>
         if (this.state.employees.length > 0) {
             createEmpBtn = null
         }
