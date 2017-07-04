@@ -64,7 +64,7 @@ func (m *MegaCorp) OnInit() error {
 		if !strings.Contains(err.Error(), "already exists") {
 			return fmt.Errorf("failed to create ledger: %s", err.Error())
 		}
-		return err
+		return nil
 	}
 
 	// persist the current coin supply
