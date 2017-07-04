@@ -58,21 +58,21 @@ func (m *MegaCorp) OnInit() error {
 		"backend_dev":  120000.00,
 	}
 
-	defer m.cron()
-
 	// create ledger
 	_, err := Me.NewLedger(Ledger, true, true)
 	if err != nil {
 		if !strings.Contains(err.Error(), "already exists") {
 			return fmt.Errorf("failed to create ledger: %s", err.Error())
 		}
-		return nil
+		return err
 	}
 
 	// persist the current coin supply
 	if _, err = Me.Put(Ledger, "total_megacoin", []byte(TotalMegaCoin)); err != nil {
 		return fmt.Errorf("failed to set coin supply")
 	}
+
+	go m.cron()
 
 	return nil
 }
