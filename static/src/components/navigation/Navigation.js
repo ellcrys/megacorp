@@ -22,7 +22,7 @@ class Navigation extends Base {
                 </div>
                 <div className="nav-center">
                     <div className="nav-item">
-                        <img src={constants.imgDir + logo} className="logo" alt="logo" />
+                        <img src={constants.imgDir + "/media/MegaCorp.cfc0a723.svg"} className="logo" alt="logo" />
                     </div>
                 </div>  
                 <div className="nav-right">
