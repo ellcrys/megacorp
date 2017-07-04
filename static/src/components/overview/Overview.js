@@ -84,7 +84,7 @@ class Overview extends Base {
             return <article key={employee.AccountID} className="media">
                 <figure className="media-left">
                     <p className="image is-64x64">
-                    <img src={constants.imgDir + "/media/128x128.svg"} alt={employee.AccountID} />
+                    <img src="http://bulma.io/images/placeholders/128x128.png" alt={employee.AccountID} />
                     </p>
                 </figure>
                 <div className="media-content">
