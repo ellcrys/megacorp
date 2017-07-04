@@ -3,7 +3,7 @@ contracts {
     
     # A unique ID (ex: com.mywebsite.com.myname).
     # If not provided, a UUID v4 ID is generated. 
-    id = "megacorp2"
+    id = "megacorp"
     
     # Contract source location and information
     repo {
