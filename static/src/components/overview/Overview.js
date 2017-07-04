@@ -119,7 +119,7 @@ class Overview extends Base {
                         {this.listAccounts()}
                     </div>
                 </div>
-                <div className="column is-pulled-right has-text-right">
+                <div className="column ">
                     <h1 className="title is-4">Employees</h1>
                     <h3 className="subtitle is-6">These are all existing MegaCorp employees</h3>
                     <div className="content">

@@ -4,6 +4,7 @@ import Base from '../base/Base'
 import { connect } from 'react-redux'
 import { mapStateToProps, matchDispatchToProps } from './mappings'
 import logo from '../../images/MegaCorp.svg'
+import constants from '../../constants'
 
 export type PropTypes = {
 }
@@ -21,7 +22,7 @@ class Navigation extends Base {
                 </div>
                 <div className="nav-center">
                     <div className="nav-item">
-                        <img src={logo} className="logo" alt="logo" />
+                        <img src={constants.imgDir + logo} className="logo" alt="logo" />
                     </div>
                 </div>  
                 <div className="nav-right">
