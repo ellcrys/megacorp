@@ -19,7 +19,7 @@ contracts {
         # Specify the ID of another cocoon to link to.
         # The contract will have the same privileges of the linked contract
         # and will become participate in load balancing requests coming into 
-        # the linked cocoon code. 
+        # the linked cocoon code. X
         # Both contracts must be owned by same identity.
         link = ""
     }
