@@ -3,7 +3,7 @@ contracts {
     
     # A unique ID (ex: com.mywebsite.com.myname).
     # If not provided, a UUID v4 ID is generated. 
-    id = "megacorp"
+    id = "megacorp2"
     
     # Contract source location and information
     repo {
@@ -38,9 +38,9 @@ contracts {
     # Provide signatory information
     signatories {
         # The maximum number of signatories to accept
-        max = 1
+        max = 3
         # The number of signature required to approve a release
-        threshold = 1
+        threshold = 2
     }
     
     # Access control list stanza allows the contract
