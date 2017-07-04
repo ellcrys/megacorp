@@ -38,9 +38,9 @@ contracts {
     # Provide signatory information
     signatories {
         # The maximum number of signatories to accept
-        max = 3
+        max = 1
         # The number of signature required to approve a release
-        threshold = 2
+        threshold = 1
     }
     
     # Access control list stanza allows the contract
