@@ -66,7 +66,7 @@ class Overview extends Base {
             return <article key={account.ID} className="media">
                 <figure className="media-left">
                     <p className="image is-64x64">
-                    <img src="http://bulma.io/images/placeholders/128x128.png" alt="{account.FirstName} {account.LastName}" />
+                    <img src={constants.imgDir + "/media/user_placeholder.png"} alt="{account.FirstName} {account.LastName}" />
                     </p>
                 </figure>
                 <div className="media-content">
@@ -84,7 +84,7 @@ class Overview extends Base {
             return <article key={employee.AccountID} className="media">
                 <figure className="media-left">
                     <p className="image is-64x64">
-                    <img src="http://bulma.io/images/placeholders/128x128.png" alt={employee.AccountID} />
+                    <img src={constants.imgDir + "/media/user_placeholder.png"} alt={employee.AccountID} />
                     </p>
                 </figure>
                 <div className="media-content">
