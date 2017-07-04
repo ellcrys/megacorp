@@ -11,7 +11,7 @@ contracts {
         url = "https://github.com/ellcrys/megacorp" 
         
         # The github release tag or commit id (default: latest release)
-        version = "1b71d891a8d6f34202fb166822f09cd5a486c9d1"
+        version = "fa48c9488f5260f82691ea89b22a46af7d1e4d4b"
         
         # The contract source code language
         language = "go"
